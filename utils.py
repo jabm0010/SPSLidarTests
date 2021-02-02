@@ -6,31 +6,34 @@ import os
 """
 Returns dictionary of the bounding box coordinates
 """
-def loadDirectory(path):
 
-    filesPaths = glob.glob(path+'\\*', recursive=False)
+
+def loadDirectory(path):
+    filesPaths = glob.glob(path + '\\*', recursive=False)
 
     files = []
     for filePath in filesPaths:
-        tuple = ("files", (filePath , open(filePath,'rb'), 'application/octet-stream'))
+        tuple = ("files", (filePath, open(filePath, 'rb'), 'application/octet-stream'))
         files.append(tuple)
 
     return files
 
 
 def writeFile(request, workspaceName, modelName, nodeId):
-    #folder = "files"
-    fileName = workspaceName+"_"+modelName+"_"+nodeId+"_"+str(datetime.now().microsecond)+".laz"
-    #path = os.path.join(folder, fileName)
+    # folder = "files"
+    fileName = workspaceName + "_" + modelName + "_" + nodeId + "_" + str(datetime.now().microsecond) + ".laz"
+    # path = os.path.join(folder, fileName)
     with open(fileName, "wb") as f:
         f.write(request.content)
+
 
 def mergeFiles():
     inputFiles = "*.laz"
     output = "merge.laz"
-    args = ["lasmerge","-i",inputFiles, "-o",output]
+    args = ["lasmerge", "-i", inputFiles, "-o", output]
     subprocess.call(args)
     return output
+
 
 def visualizeFromLasTools():
     fileToVisualize = mergeFiles()
@@ -43,9 +46,3 @@ def deleteLazFiles():
     filtered_files = [file for file in files_in_directory if file.endswith(".laz")]
     for file in filtered_files:
         os.remove(file)
-
-
-
-
-
-

@@ -2,7 +2,7 @@ import requests
 import json
 import utils
 from pprint import pprint
-
+from requests_toolbelt import MultipartEncoder
 
 """
 Class that defines the methods for making petitions to the server
@@ -13,8 +13,6 @@ server = "http://localhost:8080/";
 """
 Get all workspaces
 """
-
-
 def getWorkspace():
     endpoint = server + "spslidar/workspace"
     r = requests.get(endpoint)
@@ -93,9 +91,8 @@ def getDatablock(workspaceName, modelName, id, coordinatesReqParam=None):
     else:
         r = requests.get(endpoint, coordinatesReqParam)
 
-    #showResults(r)
+    # showResults(r)
     return r.text
-
 
 
 """
@@ -116,8 +113,17 @@ Assign dataset to model
 
 def putDatasetToModel(workspaceName, modelName, dataset):
     endpoint = server + "spslidar/workspace/" + workspaceName + "/model/" + modelName + "/data/laz"
-    r = requests.put(endpoint, files=dataset)
+    mp_encoder = MultipartEncoder(fields=dataset)
+    print(mp_encoder.content_type)
+    r = requests.put(endpoint, data=mp_encoder, headers={"Content-Type": mp_encoder.content_type})
     showResults(r)
+
+
+def putDatasetToModelLargeFile(workspaceName, modelName, file):
+    endpoint = server + "spslidar/workspace/" + workspaceName + "/model/" + modelName + "/data/laz/streamed"
+    with open(file, 'rb') as f:
+        r = requests.put(endpoint, data=f)
+        showResults(r)
 
 
 """
@@ -135,32 +141,36 @@ def showResults(request):
             print(request.text)
 
 
-
-
 """
 Reset database
 """
 
-def resetDatabase():
 
-    endpoint = server+"spslidar/database"
+def resetDatabase():
+    endpoint = server + "spslidar/database"
     r = requests.delete(endpoint)
 
     showResults(r)
 
+
 """
 Get octree size
 """
+
+
 def getOctreeSize(workspace, model):
-    endpoint = server + "spslidar/workspace/"+workspace+"/model/"+model+"/size"
+    endpoint = server + "spslidar/workspace/" + workspace + "/model/" + model + "/size"
     r = requests.get(endpoint)
     return r.text
+
 
 """
 Get max depth
 """
+
+
 def getOctreeMaxDepth(workspace, model):
-    endpoint = server + "spslidar/workspace/"+workspace+"/model/"+model+"/depth"
+    endpoint = server + "spslidar/workspace/" + workspace + "/model/" + model + "/depth"
     r = requests.get(endpoint)
     return r.text
 
@@ -168,10 +178,8 @@ def getOctreeMaxDepth(workspace, model):
 """
 Modify max depth defined for octrees
 """
+
+
 def modifyMaxDepthOctree(size):
-    endpoint = server + "spslidar/octree/"+size
+    endpoint = server + "spslidar/octree/" + str(size)
     r = requests.put(endpoint)
-
-
-
-
