@@ -106,13 +106,73 @@ def getDatablockFile(workspaceName, datasetName, id, coordinatesReqParam):
 
 
 """
-Assign dataset to dataset
+Assign dataset 
+"""
+def putData(workspaceName, datasetName, dataset):
+    endpoint = server + "spslidar/workspaces/" + workspaceName + "/datasets/" + datasetName + "/data"
+    mp_encoder = MultipartEncoder(fields=dataset)
+    print(mp_encoder.content_type)
+    r = requests.put(endpoint, data=mp_encoder, headers={"Content-Type": mp_encoder.content_type})
+    showResults(r)
+
+
+"""
+Generic method to print the statuds code recevied and the content
 """
 
 
-def putData(workspaceName, datasetName, dataset):
-    endpoint = server + "spslidar/workspacesendpoint = server + "spslidar/octree/" + str(size)
-    r = requests.put(endpoint)
+def showResults(request):
+    print("Status code returned: ", str(request.status_code))
+    if quiet == False:
+        try:
+            jsondata = json.loads(request.text)
+            pprint(jsondata)
+        except:
+            print(request.text)
+
+
+"""
+Reset database
+"""
+
+
+def resetDatabase():
+    endpoint = server + "spslidar/database"
+    r = requests.delete(endpoint)
+
+    showResults(r)
+
+
+"""
+Get octree size
+"""
+
+
+def getOctreeSize(workspace, dataset):
+    endpoint = server + "spslidar/workspaces/" + workspace + "/datasets/" + dataset + "/size"
+    r = requests.get(endpoint)
+    return r.text
+
+
+"""
+Get max depth
+"""
+
+
+def getOctreeMaxDepth(workspace, dataset):
+    endpoint = server + "spslidar/workspaces/" + workspace + "/datasets/" + dataset + "/depth"
+    r = requests.get(endpoint)
+    return r.text
+
+
+"""
+Modify max depth defined for octrees
+"""
+
+
+def modifyMaxDepthOctree(size):
+    endpoint = server + "spslidar/octree/" + str(size)
+
 
 
 """
