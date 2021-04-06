@@ -103,7 +103,7 @@ Get datablock file
 def getDatablockFile(workspaceName, modelName, id, coordinatesReqParam):
     endpoint = server + "spslidar/workspace/" + workspaceName + "/model/" + modelName + "/data/" + id + "/laz"
     r = requests.get(endpoint, params=coordinatesReqParam)
-    utils.writeFile(r, workspaceName, modelName, id)
+    #utils.writeFile(r, workspaceName, modelName, id)
 
 
 """
@@ -183,3 +183,13 @@ Modify max depth defined for octrees
 def modifyMaxDepthOctree(size):
     endpoint = server + "spslidar/octree/" + str(size)
     r = requests.put(endpoint)
+
+
+"""
+Get database size
+"""
+
+def getDatabaseSize():
+    endpoint = server + "spslidar/database"
+    r = requests.get(endpoint)
+    return r.text

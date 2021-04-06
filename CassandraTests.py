@@ -17,21 +17,21 @@ dataset20173000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\LiDAR_2017"
 dataset20173000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\CombinedAll"
 
 datasets = []
-#datasets.append(dataset2011Training)
-#datasets.append(dataset2017Training)
-#datasets.append(dataset2017500MillPoints)
-datasets.append(dataset20171000MillPoints)
+datasets.append(dataset2011Training)
+# datasets.append(dataset2017Training)
+# datasets.append(dataset2017500MillPoints)
+# datasets.append(dataset20171000MillPoints)
 # datasets.append(dataset20173000MillPoints)
 
 # Datablocks max size to use
 testsMaxDatablockSizes = []
 testsMaxDatablockSizes.append(5000000)
 # testsMaxDatablockSizes.append(2500000)
-#testsMaxDatablockSizes.append(1000000)
+# testsMaxDatablockSizes.append(1000000)
 # testsMaxDatablockSizes.append(500000)
-#testsMaxDatablockSizes.append(100000)
+# testsMaxDatablockSizes.append(100000)
 # testsMaxDatablockSizes.append(50000)
-#testsMaxDatablockSizes.append(10000)
+# testsMaxDatablockSizes.append(10000)
 
 # MaxOctreeSizes
 testsMaxOctreeSizes = []
@@ -173,11 +173,10 @@ def downloadFile(nextId, dict):
     start = time.time()
     sreq.getDatablockFile(workspaceName, modelName, str(nextId), dict)
     end = time.time()
+
     totalDownloadRequestTime += (end - start)
     filesDownloaded += 1
     totalPointsDownloaded += int(tmpNode[0]["size"])
-    time.sleep(0.1)
-
     children = tmpNode[0]["children"]
 
     for child in children:
@@ -193,7 +192,7 @@ for parameter in parameters:
     f = open(str(parameter[0]) + str(parameter[1]) + str(parameter[2]) + ".txt", "a")
     f.write("TEST")
 
-    createProcess(parameter[0], parameter[1], parameter[2])
+    # createProcess(parameter[0], parameter[1], parameter[2])
     time.sleep(10)
     retrieveProcess()
 
@@ -205,10 +204,6 @@ for parameter in parameters:
     writeMaxDepthInOctree = "Max depth in octree: " + sreq.getOctreeMaxDepth(workspaceName, modelName) + "\n"
     f.write(writeMaxDepthInOctree)
     print(writeMaxDepthInOctree)
-
-    writeDatabaseSize = "Database size: " + sreq.getDatabaseSize() + "\n"
-    f.write(writeDatabaseSize)
-    print(writeDatabaseSize)
 
     f.write("------------------------------------------------\n")
     f.close()
