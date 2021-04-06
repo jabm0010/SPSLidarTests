@@ -1,8 +1,6 @@
 import serverRequests as sreq
 import time
 import utils
-import os
-import json
 import itertools
 from pymongo import MongoClient
 
@@ -10,34 +8,32 @@ sreq.quiet = True
 
 ######Configuration############
 # Datasets to test
+# Change for paths in pc
 dataset2011Training = "C:\\Datasets\\Drive\\Pamplona\\Training Areas\\LiDAR_2011"
 dataset2017Training = "C:\\Datasets\\Drive\\Pamplona\\Training Areas\\LiDAR_2017"
 dataset2017500MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined5"
 dataset20171000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined10"
-dataset20173000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\LiDAR_2017"
-dataset20173000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\CombinedAll"
+
 
 datasets = []
-#datasets.append(dataset2011Training)
-#datasets.append(dataset2017Training)
+datasets.append(dataset2011Training)
+datasets.append(dataset2017Training)
 datasets.append(dataset20171000MillPoints)
 datasets.append(dataset2017500MillPoints)
-# datasets.append(dataset20173000MillPoints)
 
 # Datablocks max size to use
 testsMaxDatablockSizes = []
-#testsMaxDatablockSizes.append(5000000)
-#testsMaxDatablockSizes.append(2500000)
-#testsMaxDatablockSizes.append(1000000)
-#testsMaxDatablockSizes.append(500000)
-#testsMaxDatablockSizes.append(100000)
-#testsMaxDatablockSizes.append(50000)
+testsMaxDatablockSizes.append(5000000)
+testsMaxDatablockSizes.append(2500000)
+testsMaxDatablockSizes.append(1000000)
+testsMaxDatablockSizes.append(500000)
+testsMaxDatablockSizes.append(100000)
+testsMaxDatablockSizes.append(50000)
 testsMaxDatablockSizes.append(10000)
 
 # MaxOctreeSizes
 testsMaxOctreeSizes = []
 testsMaxOctreeSizes.append(8)
-# testsMaxOctreeSizes.append(16)
 
 parameters = list(itertools.product(datasets, testsMaxDatablockSizes, testsMaxOctreeSizes))
 ######################################
@@ -80,12 +76,12 @@ def createProcess(datasetToPut, datablockSize, octreeSize):
     }
 
     sreq.postWorkspace(workspace)
-    sreq.postModel(workspaceName, model)
+    sreq.postDataset(workspaceName, model)
     sreq.modifyMaxDepthOctree(octreeSize)
 
     files = utils.loadDirectory(datasetToPut)
     start = time.time()
-    sreq.putDatasetToModel(workspaceName, modelName, files)
+    sreq.putData(workspaceName, modelName, files)
     end = time.time()
 
     write = "Dataset: " + datasetToPut + "\n" + \

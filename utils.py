@@ -19,10 +19,8 @@ def loadDirectory(path):
     return files
 
 
-def writeFile(request, workspaceName, modelName, nodeId):
-    # folder = "files"
-    fileName = workspaceName + "_" + modelName + "_" + nodeId + "_" + str(datetime.now().microsecond) + ".laz"
-    # path = os.path.join(folder, fileName)
+def writeFile(request, workspaceName, datasetName, nodeId):
+    fileName = workspaceName + "_" + datasetName + "_" + nodeId + "_" + str(datetime.now().microsecond) + ".laz"
     with open(fileName, "wb") as f:
         f.write(request.content)
 

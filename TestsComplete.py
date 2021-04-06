@@ -13,56 +13,53 @@ dataset2011Training = "C:\\Datasets\\Drive\\Pamplona\\Training Areas\\LiDAR_2011
 dataset2017Training = "C:\\Datasets\\Drive\\Pamplona\\Training Areas\\LiDAR_2017"
 dataset2017500MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined5"
 dataset20171000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined10"
-dataset20173000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\LiDAR_2017"
-dataset20173000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\CombinedAll"
 
 datasets = []
-#datasets.append(dataset2011Training)
+datasets.append(dataset2011Training)
 #datasets.append(dataset2017Training)
 #datasets.append(dataset2017500MillPoints)
-datasets.append(dataset20171000MillPoints)
-# datasets.append(dataset20173000MillPoints)
+#datasets.append(dataset20171000MillPoints)
+
 
 # Datablocks max size to use
 testsMaxDatablockSizes = []
 testsMaxDatablockSizes.append(5000000)
-# testsMaxDatablockSizes.append(2500000)
+#testsMaxDatablockSizes.append(2500000)
 #testsMaxDatablockSizes.append(1000000)
-# testsMaxDatablockSizes.append(500000)
+#testsMaxDatablockSizes.append(500000)
 #testsMaxDatablockSizes.append(100000)
-# testsMaxDatablockSizes.append(50000)
+#testsMaxDatablockSizes.append(50000)
 #testsMaxDatablockSizes.append(10000)
 
 # MaxOctreeSizes
 testsMaxOctreeSizes = []
 testsMaxOctreeSizes.append(8)
-# testsMaxOctreeSizes.append(16)
 
 parameters = list(itertools.product(datasets, testsMaxDatablockSizes, testsMaxOctreeSizes))
 ######################################
 
 global f
 workspaceName = "Navarra"
-modelName = "City of Pamplona"
+datasetName = "City of Pamplona"
 
 
 def createProcess(datasetToPut, datablockSize, octreeSize):
-    # Reset DB, insert workspace and model
+    # Reset DB, insert workspace and dataset
     sreq.resetDatabase()
     time.sleep(20)
     global f
 
     workspace = {
         "name": workspaceName,
-        "description": "Workspace with the models of Navarra",
-        "gridSize": 10000
+        "description": "Workspace with the datasets of Navarra",
+        "cellSize": 10000
     }
 
-    model = {
-        "name": modelName,
-        "description": "Model of the city of Pamplona 01",
-        "date": "2017-01-01T12:00:00Z",
-        "bbox": {
+    dataset = {
+        "name": datasetName,
+        "description": "Dataset of the city of Pamplona 01",
+        "dateOfAcquisition": "2017-01-01T12:00:00Z",
+        "boundingBox": {
             "southWestBottom": {
                 "easting": "606000",
                 "northing": "4736000",
@@ -79,12 +76,12 @@ def createProcess(datasetToPut, datablockSize, octreeSize):
     }
 
     sreq.postWorkspace(workspace)
-    sreq.postModel(workspaceName, model)
+    sreq.postDataset(workspaceName, dataset)
     sreq.modifyMaxDepthOctree(octreeSize)
 
     files = utils.loadDirectory(datasetToPut)
     start = time.time()
-    sreq.putDatasetToModel(workspaceName, modelName, files)
+    sreq.putData(workspaceName, datasetName, files)
     end = time.time()
 
     write = "Dataset: " + datasetToPut + "\n" + \
@@ -96,8 +93,6 @@ def createProcess(datasetToPut, datablockSize, octreeSize):
 
 
 def retrieveProcess():
-    workspaceName = "Navarra"
-    modelName = "City of Pamplona"
 
     global numberOfPointsToSurpass
     global filesDownloaded
@@ -110,7 +105,7 @@ def retrieveProcess():
     totalPointsDownloaded = 0
     totalDownloadRequestTime = 0
 
-    rootDBs = sreq.getDatablock(workspaceName, modelName, str(0), None)
+    rootDBs = sreq.getDatablock(workspaceName, datasetName, str(0), None)
     jsondata = json.loads(rootDBs)
 
     for rootDB in jsondata:
@@ -149,8 +144,8 @@ def retrieveProcess():
 
 def traverseOctree(rootDB):
     # Define the local Grid of the nodes
-    swBottom = rootDB["grid"]["southWestBottom"]
-    neTop = rootDB["grid"]["northEastTop"]
+    swBottom = rootDB["cell"]["southWestBottom"]
+    neTop = rootDB["cell"]["northEastTop"]
     swBottomStr = swBottom["zone"] + str(swBottom["easting"]) + str(swBottom["northing"])
     neTopStr = neTop["zone"] + str(neTop["easting"]) + str(neTop["northing"])
 
@@ -168,10 +163,10 @@ def downloadFile(nextId, dict):
     global totalPointsDownloaded
     global totalDownloadRequestTime
 
-    text = sreq.getDatablock(workspaceName, modelName, str(nextId), dict)
+    text = sreq.getDatablock(workspaceName, datasetName, str(nextId), dict)
     tmpNode = json.loads(text)
     start = time.time()
-    sreq.getDatablockFile(workspaceName, modelName, str(nextId), dict)
+    sreq.getDatablockFile(workspaceName, datasetName, str(nextId), dict)
     end = time.time()
     totalDownloadRequestTime += (end - start)
     filesDownloaded += 1
@@ -198,11 +193,11 @@ for parameter in parameters:
     retrieveProcess()
 
     writeNumberOfDblocksGenerated = "Number of datablocks generated: " + sreq.getOctreeSize(workspaceName,
-                                                                                            modelName) + "\n"
+                                                                                            datasetName) + "\n"
     f.write(writeNumberOfDblocksGenerated)
     print(writeNumberOfDblocksGenerated)
 
-    writeMaxDepthInOctree = "Max depth in octree: " + sreq.getOctreeMaxDepth(workspaceName, modelName) + "\n"
+    writeMaxDepthInOctree = "Max depth in octree: " + sreq.getOctreeMaxDepth(workspaceName, datasetName) + "\n"
     f.write(writeMaxDepthInOctree)
     print(writeMaxDepthInOctree)
 
@@ -212,4 +207,3 @@ for parameter in parameters:
 
     f.write("------------------------------------------------\n")
     f.close()
-    # time.sleep(20)
