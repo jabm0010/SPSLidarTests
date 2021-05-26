@@ -10,25 +10,25 @@ sreq.quiet = True
 ######Configuration############
 ####Change paths of datasets and parameters####
 # Datasets to test
-dataset2011Training = "D:\Drive\Pamplona\Training Areas\LiDAR_2011"
-dataset2017Training = "D:\Drive\Pamplona\Training Areas\LiDAR_2017"
+dataset2011Training = "C:\\Datasets\\Drive\\Pamplona\\Training Areas\\LiDAR_2011"
+dataset2017Training = "C:\\Datasets\\Drive\\Pamplona\\Training Areas\\LiDAR_2017"
 dataset2017500MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined5"
 dataset20171000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined10"
 
 datasets = []
-#datasets.append(dataset2011Training)
-datasets.append(dataset2017Training)
+datasets.append(dataset2011Training)
+#datasets.append(dataset2017Training)
 #datasets.append(dataset2017500MillPoints)
 #datasets.append(dataset20171000MillPoints)
 
 
 # Datablocks max size to use
 testsMaxDatablockSizes = []
-#testsMaxDatablockSizes.append(5000000)
+testsMaxDatablockSizes.append(5000000)
 #testsMaxDatablockSizes.append(2500000)
 #testsMaxDatablockSizes.append(1000000)
 #testsMaxDatablockSizes.append(500000)
-testsMaxDatablockSizes.append(100000)
+#testsMaxDatablockSizes.append(100000)
 #testsMaxDatablockSizes.append(50000)
 #testsMaxDatablockSizes.append(10000)
 
@@ -201,6 +201,9 @@ for parameter in parameters:
     writeMaxDepthInOctree = "Max depth in octree: " + sreq.getOctreeMaxDepth(workspaceName, datasetName) + "\n"
     f.write(writeMaxDepthInOctree)
     print(writeMaxDepthInOctree)
+
+    writeDatabaseSize = "Database size: " + sreq.getDatabaseSize() + "\n"
+    print(writeDatabaseSize)
 
 
     f.write("------------------------------------------------\n")
