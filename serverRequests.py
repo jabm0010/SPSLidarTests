@@ -66,6 +66,7 @@ def getDatasetByName(workspaceName, datasetName):
     endpoint = server + "spslidar/workspaces/" + workspaceName + "/datasets/" + datasetName
     r = requests.get(endpoint)
     showResults(r)
+    return r
 
 
 """
@@ -102,7 +103,15 @@ Get datablock file
 def getDatablockFile(workspaceName, datasetName, id, coordinatesReqParam):
     endpoint = server + "spslidar/workspaces/" + workspaceName + "/datasets/" + datasetName + "/datablocks/" + id + "/data"
     r = requests.get(endpoint, params=coordinatesReqParam)
+    return r
     #utils.writeFile(r, workspaceName, datasetName, id) #Write downloaded files if wanted
+
+
+def getCompleteDataset(workspaceName, datasetName):
+    endpoint = server + "spslidar/workspaces/" + workspaceName + "/datasets/" + datasetName +"/data"
+    r = requests.get(endpoint)
+    utils.writeFile(r, workspaceName, datasetName, "0")
+
 
 
 """
