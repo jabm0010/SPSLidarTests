@@ -4,6 +4,8 @@ import utils
 import os
 import json
 import itertools
+from openpyxl import Workbook
+
 
 sreq.quiet = True
 
@@ -42,6 +44,17 @@ parameters = list(itertools.product(datasets, testsMaxDatablockSizes, testsMaxOc
 global f
 workspaceName = "Navarra"
 datasetName = "City of Pamplona"
+
+
+results = {}
+for dataset in datasets:
+    results[dataset] = {}
+    results[dataset]["Fields"] = ("Insertion time", "Files downloaded",
+                                       "Total Download Request Time", "Total Points Downloaded",
+                                       "Avg Time of File Download", "Avg Time of Point Download")
+    for testsMaxDatablockSize in testsMaxDatablockSizes:
+        results[dataset][testsMaxDatablockSize] = tuple()
+
 
 
 def createProcess(datasetToPut, datablockSize, octreeSize):
@@ -85,6 +98,9 @@ def createProcess(datasetToPut, datablockSize, octreeSize):
     sreq.putData(workspaceName, datasetName, files)
     end = time.time()
 
+    ###
+    results[datasetToPut][datablockSize] += ((end-start),)
+
     write = "Dataset: " + datasetToPut + "\n" + \
             "Max depth: " + str(octreeSize) + "\n" + \
             "Datablock max size: " + str(datablockSize) + "\n" + \
@@ -93,7 +109,7 @@ def createProcess(datasetToPut, datablockSize, octreeSize):
     print(write)
 
 
-def retrieveProcess():
+def retrieveProcess(datasetToPut, datablockSize):
 
     global numberOfPointsToSurpass
     global filesDownloaded
@@ -113,6 +129,10 @@ def retrieveProcess():
         traverseOctree(rootDB)
 
         if totalPointsDownloaded > numberOfPointsToSurpass:
+            ###
+            results[datasetToPut][datablockSize] += (filesDownloaded, totalDownloadRequestTime, totalPointsDownloaded,
+                                                     totalDownloadRequestTime/filesDownloaded, totalDownloadRequestTime/totalPointsDownloaded)
+
             writeNumberOfFiles = "Number of files: " + str(filesDownloaded) + "\n"
             f.write(writeNumberOfFiles)
             print(writeNumberOfFiles)
@@ -183,6 +203,30 @@ def downloadFile(nextId, dict):
             pass
 
 
+
+
+def createSheet(database):
+    workbook = Workbook()
+
+    sheet = workbook.create_sheet(title = database)
+    initRow = 1
+
+    for dataset in results.keys():
+        sheet.cell(column = 2, row = initRow, value = dataset)
+        initRow +=12
+        initCol = 4
+        for maxSize in results[dataset].keys():
+            tmpRow = initRow
+            _ = sheet.cell(column=initCol, row=tmpRow-1, value=maxSize)
+            for valueToWrite in results[dataset][maxSize]:
+                _ = sheet.cell(column=initCol, row=tmpRow, value= valueToWrite)
+                tmpRow+=1
+            initCol+=1
+
+    workbook.save(database+".xlsx")
+
+
+
 #### Main loop ####
 for parameter in parameters:
     global f
@@ -191,7 +235,7 @@ for parameter in parameters:
 
     createProcess(parameter[0], parameter[1], parameter[2])
     time.sleep(10)
-    retrieveProcess()
+    retrieveProcess(str(parameter[0]),parameter[1])
 
     writeNumberOfDblocksGenerated = "Number of datablocks generated: " + sreq.getOctreeSize(workspaceName,
                                                                                             datasetName) + "\n"
@@ -208,3 +252,6 @@ for parameter in parameters:
 
     f.write("------------------------------------------------\n")
     f.close()
+
+
+#createSheet("Mongo")
