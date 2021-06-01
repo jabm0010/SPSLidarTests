@@ -8,9 +8,9 @@ datablocksIDs = [0, 1, 2, 3, 4]
 cell = 1
 areaOfInterest = {
     "south": 1159000,
-    "west": 821950,
-    "north": 1159506,
-    "east": 829700,
+    "west": 829950,
+    "north": 1159350,
+    "east": 830000,
 }
 
 
