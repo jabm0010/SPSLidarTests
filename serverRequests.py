@@ -65,7 +65,7 @@ Gets a single dataset identified by its workspace and its own name
 def getDatasetByName(workspaceName, datasetName):
     endpoint = server + "spslidar/workspaces/" + workspaceName + "/datasets/" + datasetName
     r = requests.get(endpoint)
-    showResults(r)
+    #showResults(r)
     return r
 
 
