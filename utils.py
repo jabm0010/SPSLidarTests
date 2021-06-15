@@ -2,6 +2,8 @@ from _datetime import datetime
 import glob
 import subprocess
 import os
+from openpyxl import Workbook
+
 
 """
 Returns dictionary of the bounding box coordinates
@@ -47,3 +49,25 @@ def deleteLazFiles():
     filtered_files = [file for file in files_in_directory if file.endswith(".laz")]
     for file in filtered_files:
         os.remove(file)
+
+
+def createSheet(database, results):
+    workbook = Workbook()
+
+    sheet = workbook.create_sheet(title = database)
+    initRow = 1
+
+    for dataset in results.keys():
+        sheet.cell(column = 2, row = initRow, value = dataset)
+        initRow +=12
+        initCol = 4
+        for maxSize in results[dataset].keys():
+            tmpRow = initRow
+            _ = sheet.cell(column=initCol, row=tmpRow-1, value=maxSize)
+            for valueToWrite in results[dataset][maxSize]:
+                _ = sheet.cell(column=initCol, row=tmpRow, value= valueToWrite)
+                tmpRow+=1
+            initCol+=1
+
+    workbook.save(database+".xlsx")
+

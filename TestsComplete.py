@@ -6,7 +6,6 @@ import json
 import itertools
 from openpyxl import Workbook
 
-
 sreq.quiet = True
 
 ######Configuration############
@@ -18,19 +17,19 @@ dataset2017500MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined5"
 dataset20171000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined10"
 
 datasets = []
-datasets.append(dataset2011Training)
+#datasets.append(dataset2011Training)
 #datasets.append(dataset2017Training)
-#datasets.append(dataset2017500MillPoints)
+datasets.append(dataset2017500MillPoints)
 #datasets.append(dataset20171000MillPoints)
 
 
 # Datablocks max size to use
 testsMaxDatablockSizes = []
-testsMaxDatablockSizes.append(5000000)
+#testsMaxDatablockSizes.append(5000000)
 #testsMaxDatablockSizes.append(2500000)
-testsMaxDatablockSizes.append(1000000)
+#testsMaxDatablockSizes.append(1000000)
 #testsMaxDatablockSizes.append(500000)
-#testsMaxDatablockSizes.append(100000)
+testsMaxDatablockSizes.append(100000)
 #testsMaxDatablockSizes.append(50000)
 #testsMaxDatablockSizes.append(10000)
 
@@ -233,7 +232,7 @@ for parameter in parameters:
     f = open(str(parameter[0]) + str(parameter[1]) + str(parameter[2]) + ".txt", "a")
     f.write("TEST")
 
-    createProcess(parameter[0], parameter[1], parameter[2])
+    #createProcess(parameter[0], parameter[1], parameter[2])
     time.sleep(10)
     retrieveProcess(str(parameter[0]),parameter[1])
 

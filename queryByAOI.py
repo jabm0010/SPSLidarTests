@@ -2,14 +2,15 @@ import serverRequests as sreq
 import utils
 import json
 
-workspaceName = "Navarra"
-datasetName = "City of Pamplona"
+workspaceName = "Andalucia"
+datasetName = "Jaen"
 areaOfInterest = {
-    "south": 4742000,
-    "west": 608000,
-    "north": 4749000,
-    "east": 612000,
+    "south": 4180000,
+    "west": 424000,
+    "north": 4182000,
+    "east": 426000,
 }
+
 
 def overlaps(bbox):
     x1 = bbox["southWestBottom"]["easting"] > areaOfInterest["east"]
@@ -19,7 +20,6 @@ def overlaps(bbox):
 
     noOverlap = x1 or x2 or x3 or x4
     return not noOverlap
-
 
 
 def defineCellBox(gridCell):
@@ -34,6 +34,7 @@ def defineCellBox(gridCell):
     }
     return endPointCoordinateParameters
 
+
 def findOverlappingGridCells():
     dataset = sreq.getDatasetByName(workspaceName, datasetName)
     jsonzedDataset = json.loads(dataset.text)
@@ -44,8 +45,8 @@ def findOverlappingGridCells():
 
     return listOfOverlappingGridCells
 
-overlappingGridCells = findOverlappingGridCells()
 
+overlappingGridCells = findOverlappingGridCells()
 
 
 ###Main method to invoke for download by area
@@ -61,13 +62,12 @@ def recoverByArea():
 
 ###Recursive method to download children that fit the region defined for download of files
 def recursiveRecovery(children, cell):
-
     for id in children:
         datablock = sreq.getDatablock(workspaceName, datasetName, str(id), cell)
         jsonziedDatablock = json.loads(datablock)
         if overlaps(jsonziedDatablock[0]["bbox"]):
             writeFile(workspaceName, datasetName, id, cell)
-            recursiveRecovery(jsonziedDatablock[0]["children"],cell)
+            recursiveRecovery(jsonziedDatablock[0]["children"], cell)
 
 
 def writeFile(workspaceName, datasetName, id, endPointCoordinateParameters):
@@ -78,5 +78,5 @@ def writeFile(workspaceName, datasetName, id, endPointCoordinateParameters):
         utils.writeFile(file, workspaceName, datasetName, str(id))
 
 
-
 recoverByArea()
+print("Finished download")
