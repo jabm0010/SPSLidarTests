@@ -26,9 +26,9 @@ datasets.append(dataset20171000MillPoints)
 testsMaxDatablockSizes = []
 #testsMaxDatablockSizes.append(5000000)
 #testsMaxDatablockSizes.append(2500000)
-testsMaxDatablockSizes.append(1000000)
+#testsMaxDatablockSizes.append(1000000)
 #testsMaxDatablockSizes.append(500000)
-#testsMaxDatablockSizes.append(100000)
+testsMaxDatablockSizes.append(100000)
 #testsMaxDatablockSizes.append(50000)
 #testsMaxDatablockSizes.append(10000)
 
@@ -75,8 +75,8 @@ for parameter in parameters:
         "dataBlockFormat": ".laz"
     }
 
-    results = DatasetInsertion.createProcess(workspace, dataset, parameter[0], parameter[1], parameter[2], results)
-    time.sleep(120)
+    #results = DatasetInsertion.createProcess(workspace, dataset, parameter[0], parameter[1], parameter[2], results)
+    #time.sleep(120)
     results = DataRecovery.retrieveProcess(workspace["name"], dataset["name"], parameter[0],parameter[1],results)
 
 utils.createSheet("Navarra_Mongo_SSD", results)

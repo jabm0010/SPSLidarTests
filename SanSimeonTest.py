@@ -17,14 +17,14 @@ dataset = {
     "dateOfAcquisition": "2017-01-01T12:00:00Z",
     "boundingBox": {
         "southWestBottom": {
-            "easting": "606000",
-            "northing": "4736000",
-            "zone": "30N"
+            "easting": "643000",
+            "northing": "3889000",
+            "zone": "10N"
         },
         "northEastTop": {
-            "easting": "614000",
-            "northing": " 4744000",
-            "zone": "30N"
+            "easting": "737000",
+            "northing": " 3971000",
+            "zone": "10N"
         }
     },
     "dataBlockSize": datablockSize,
@@ -47,7 +47,7 @@ for _dataset in datasets:
 
 
 
-results = DatasetInsertion.createProcess(workspace,dataset,SanSimeonDataset, datablockSize, 16, results)
+results = DatasetInsertion.createProcess(workspace,dataset,SanSimeonDataset, datablockSize, 8, results)
 results = DataRecovery.retrieveProcess(workspace["name"], dataset["name"], SanSimeonDataset, datablockSize, results)
 
 utils.createSheet("Mongo", results)
