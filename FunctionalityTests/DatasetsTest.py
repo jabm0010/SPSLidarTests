@@ -1,7 +1,7 @@
 import serverRequests as sreq
-import Tests.WorkspaceTests as wtest
+import FunctionalityTests.WorkspaceTests as wtest
 import copy
-import Tests.TestUtils as tu
+import FunctionalityTests.TestUtils as tu
 
 southWestBottom = {
     "easting": "829000",

@@ -1,6 +1,6 @@
 import serverRequests as sreq
 import copy
-import Tests.TestUtils as tu
+import FunctionalityTests.TestUtils as tu
 
 workspace = {
     "name": "Jaen",

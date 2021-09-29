@@ -1,6 +1,6 @@
-import Tests.TestUtils as tu
-import Tests.WorkspaceTests as wtest
-import Tests.DatasetsTest as dtest
+import FunctionalityTests.TestUtils as tu
+import FunctionalityTests.WorkspaceTests as wtest
+import FunctionalityTests.DatasetsTest as dtest
 import serverRequests as sreq
 import utils
 
