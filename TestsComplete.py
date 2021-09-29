@@ -17,9 +17,9 @@ dataset2017500MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined5"
 dataset20171000MillPoints = "C:\\Datasets\\Drive\\Pamplona\\Combined10"
 
 datasets = []
-#datasets.append(dataset2011Training)
+datasets.append(dataset2011Training)
 #datasets.append(dataset2017Training)
-datasets.append(dataset2017500MillPoints)
+#datasets.append(dataset2017500MillPoints)
 #datasets.append(dataset20171000MillPoints)
 
 

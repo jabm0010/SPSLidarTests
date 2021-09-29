@@ -4,10 +4,11 @@ import utils
 
 
 #Encapsulates the process of creation (post workspace + post dataset + put data)
-def createProcess(workspace, dataset, pathToDatasetFiles, datablockSize, octreeSize, results):
+def createProcess(workspace, dataset, pathToDatasetFiles, datablockSize, octreeSize, results, reset=True):
     # Reset DB, insert workspace and dataset
-    #sreq.resetDatabase()
-    time.sleep(20)
+    if reset:
+        sreq.resetDatabase()
+        time.sleep(10)
 
     sreq.postWorkspace(workspace)
     sreq.postDataset(workspace["name"], dataset)

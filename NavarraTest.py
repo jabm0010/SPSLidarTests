@@ -16,19 +16,19 @@ dataset2017500MillPoints = "D:\\Datasets\\Drive\\Pamplona\\Combined5"
 dataset20171000MillPoints = "D:\\Datasets\\Drive\\Pamplona\\Combined10"
 
 datasets = []
-#datasets.append(dataset2011Training)
+datasets.append(dataset2011Training)
 #datasets.append(dataset2017Training)
 #datasets.append(dataset2017500MillPoints)
-datasets.append(dataset20171000MillPoints)
+#datasets.append(dataset20171000MillPoints)
 
 
 # Datablocks max size to use
 testsMaxDatablockSizes = []
 #testsMaxDatablockSizes.append(5000000)
 #testsMaxDatablockSizes.append(2500000)
-#testsMaxDatablockSizes.append(1000000)
+testsMaxDatablockSizes.append(1000000)
 #testsMaxDatablockSizes.append(500000)
-testsMaxDatablockSizes.append(100000)
+#testsMaxDatablockSizes.append(100000)
 #testsMaxDatablockSizes.append(50000)
 #testsMaxDatablockSizes.append(10000)
 
@@ -75,8 +75,10 @@ for parameter in parameters:
         "dataBlockFormat": ".laz"
     }
 
-    #results = DatasetInsertion.createProcess(workspace, dataset, parameter[0], parameter[1], parameter[2], results)
-    #time.sleep(120)
+    results = DatasetInsertion.createProcess(workspace, dataset, parameter[0], parameter[1], parameter[2], results)
+    time.sleep(60)
     results = DataRecovery.retrieveProcess(workspace["name"], dataset["name"], parameter[0],parameter[1],results)
+    DataRecovery.databaseStats(workspace["name"],dataset["name"])
+
 
 utils.createSheet("Navarra_Mongo_SSD", results)

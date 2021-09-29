@@ -26,8 +26,8 @@ def retrieveProcess(workspaceName, datasetName, pathToDatasetFiles, datablockSiz
         if totalPointsDownloaded > numberOfPointsToSurpass:
             ###
             results[pathToDatasetFiles][datablockSize] += (
-            filesDownloaded, totalDownloadRequestTime, totalPointsDownloaded,
-            totalDownloadRequestTime / filesDownloaded, totalDownloadRequestTime / totalPointsDownloaded)
+                filesDownloaded, totalDownloadRequestTime, totalPointsDownloaded,
+                totalDownloadRequestTime / filesDownloaded, totalDownloadRequestTime / totalPointsDownloaded)
 
             writeNumberOfFiles = "Number of files: " + str(filesDownloaded) + "\n"
             print(writeNumberOfFiles)
@@ -92,3 +92,15 @@ def downloadFile(nextId, dict, workspaceName, datasetName):
             downloadFile(child, dict, workspaceName, datasetName)
         else:
             pass
+
+
+def databaseStats(workspaceName, datasetName):
+    writeNumberOfDblocksGenerated = "Number of datablocks generated: " + sreq.getOctreeSize(workspaceName,
+                                                                                            datasetName) + "\n"
+    print(writeNumberOfDblocksGenerated)
+
+    writeMaxDepthInOctree = "Max depth in octree: " + sreq.getOctreeMaxDepth(workspaceName, datasetName) + "\n"
+    print(writeMaxDepthInOctree)
+
+    writeDatabaseSize = "Database size: " + sreq.getDatabaseSize() + "\n"
+    print(writeDatabaseSize)
